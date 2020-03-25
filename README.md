@@ -1,16 +1,15 @@
 # MPT
-Multimodal Prioritization Tool
+## Multimodal Prioritization Tool
 
-MPT Process Documentation
 The Multimodal Prioritization Tool (MPT) uses spatial analysis and data from various sources to identify the suitability of multimodal projects. The goal is to identify the roads and communities that would benefit most from a multimodal project and the feasibility of projects based on the existing physical features and infrastructure of road segments. This is documentation on the process.
 
 
-Four Components of the MPT
+## Four Components of the MPT
 
 The composite score of the MPT or the Multimodal Priority Index (MPI) is comprised of the scores from four layers: Level of Traffic Stress, Equity, Safety, and Demand.
 
 
-Level of Traffic Stress (LTS)
+## Level of Traffic Stress (LTS)
 
 Inputs: Trims Tables (RD_SGMNT, TRAFFIC, GEOMETRICS, RDWAY_DESCR)
 
@@ -20,7 +19,7 @@ See script documentation for more detailed information on the operations taking 
 
 Note: This is very similar to how we create the Infrastructure layer (INFRA) for the Pedestrian Road Safety Initiative (PRSI).
 
-Create Unique IDs
+### Create Unique IDs
 
 The LTS output is what will eventually become the final network. It is important to set up a unique ID (UID) at this stage, because we will be segmenting the network further and will use this UID to link the data to the correct segment. The format I’ve come up with is a simple field calculation using planning area information, functional class, and OBJECTID. For example, if I were doing MPO collectors I would create a field in the final output (‘Overlay_E’) called ‘UID’. Then do the following field calculation:
 
@@ -37,7 +36,7 @@ The ‘R’ stands for ‘Rural’
 Any convention will work as long as there is a way to distinguish between planning areas and functional classification.
 
 
-Demand
+## Demand
 
 Inputs: Planning Areas (Polygon), NLCD Land Cover Class (Raster), Active Businesses (Point), Block Groups w/ Pop Density - Emp Density - Active Commute (Polygon), Colleges (Point), Supplemental Colleges (Point), Private Schools (Point), Public Schools (Point), Transit (Polyline)
 
@@ -74,7 +73,7 @@ Zonal Statistics is performed using the block groups as the zones and the mean v
 
 The output of the script is a polygon layer with a score 1 - 5. See script documentation for more information.
 
-Safety
+## Safety
 
 Inputs: Crash Layer, LTS Layers
 
@@ -93,14 +92,14 @@ You can join the Summary Statistics layer to the LTS by “UID”.
 Calculate the Safety Score by taking the average of the Severity and Frequency.
 
 
-Equity
+## Equity
 
 Inputs: EJ Layer, LTS
 
 The EJ Layer is created outside of this tool. The layer has an EJ Index field which is is based on demographics including poverty level, minority populations, zero car households, age, disability, education level, low English proficiency. We use the EJ Index to calculate the Equity score. First we scale the values 1 to 5, treating MPO and Rural areas separately. You can use the Scale Feature tool for this. To calculate the Equity Score for the LTS segments use the Weighted Average method described in this document.
 
 
-Weighted Average Method
+### Weighted Average Method
 
 This is a method to get the weighted average of a polygon score onto a road segment that passes through multiple polygons. There are other ways to do this, but this is the way I came up with so we could avoid doing it spatially.
 
@@ -133,7 +132,7 @@ Step 4. Join Tables
 
 
 
-Things To Improve
+## Things To Improve
 
 Non-coincident Polygons
 Setting up some type of topology checks on our polygon layers will be beneficial to the process. Some polygons are not coincident or they do not totally encompass our road network. This causes issues with the weighted average process.
