@@ -42,13 +42,13 @@ Inputs: Planning Areas (Polygon), NLCD Land Cover Class (Raster), Active Busines
 
 The Demand layer is spatially derived. It looks at points of attraction including active businesses, transit stops, colleges, schools, and hospitals to develop a score based on the distance to these points. It also takes into account population density, employment density, and commuter information. To create this layer, run the demand.py script. This script uses the Euclidean Distance tool to generate a series of rasters from the vector inputs. The rasters created indicate the distance from the vector feature to the the surrounding areas and are then reclassified 1-5 based on set distance groups. See the scoring table below.
 
-| Distance in Feet (Pedestrian) | Score |    | Distance in Feet (Bike)       | Score |
-| ----------------------------- | ----- |    | ----------------------------- | ----- |
-| 0 - 1320                      | 5     |    | 0 - 5280                      | 5     |
-| 1320 - 2640                   | 4     |    | 5280 - 10560                  | 4     |
-| 2640 - 3960                   | 3     |    | 10560 - 15840                 | 3     |
-| 3960  - 5280                  | 2     |    | 15840 - 21120                 | 2     |
-| 5280 +                        | 1     |    | 21120 +                       | 1     |
+| Distance in Feet (Pedestrian) | Score | Distance in Feet (Bike)       | Score |
+| ----------------------------- | ----- | ----------------------------- | ----- |
+| 0 - 1320                      | 5     | 0 - 5280                      | 5     |
+| 1320 - 2640                   | 4     | 5280 - 10560                  | 4     |
+| 2640 - 3960                   | 3     | 10560 - 15840                 | 3     |
+| 3960  - 5280                  | 2     | 15840 - 21120                 | 2     |
+| 5280 +                        | 1     | 21120 +                       | 1     |
 
 
 Three rasters are created from the block group polygons using ‘Pop_Density’, ‘Employ_Density’, and ‘Active_Commute’ as the scores. These raster are reclassified using the Slice tool. 
