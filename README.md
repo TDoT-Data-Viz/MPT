@@ -11,7 +11,7 @@ The composite score of the MPT or the Multimodal Priority Index (MPI) is compris
 
 ## Level of Traffic Stress (LTS)
 
-Inputs: Trims Tables (RD_SGMNT, TRAFFIC, GEOMETRICS, RDWAY_DESCR)
+_Inputs: Trims Tables (RD_SGMNT, TRAFFIC, GEOMETRICS, RDWAY_DESCR)_
 
 This layer looks at qualitative features of road segments including speed limit, pavement width, number of lanes, traffic volume, sidewalks and bike lanes to determine a stress score. To create this layer, run the LTS script tool. Arterials and collectors are treated separately, so this tool is ran for each functional class. You can choose the functional class using the drop-down in the tool. The tool also allows you to create the LTS layer for individual planning areas or groups. The current way we are doing things is separating MPO and Rural areas. So the LTS script will be ran four times in order to create a statewide output — All MPO Collectors, All MPO Arterials, All RPO Collectors, All RPO Arterials. 
 
@@ -38,7 +38,7 @@ Any convention will work as long as there is a way to distinguish between planni
 
 ## Demand
 
-Inputs: Planning Areas (Polygon), NLCD Land Cover Class (Raster), Active Businesses (Point), Block Groups w/ Pop Density - Emp Density - Active Commute (Polygon), Colleges (Point), Supplemental Colleges (Point), Private Schools (Point), Public Schools (Point), Transit (Polyline)
+_Inputs: Planning Areas (Polygon), NLCD Land Cover Class (Raster), Active Businesses (Point), Block Groups w/ Pop Density - Emp Density - Active Commute (Polygon), Colleges (Point), Supplemental Colleges (Point), Private Schools (Point), Public Schools (Point), Transit (Polyline)_
 
 The Demand layer is spatially derived. It looks at points of attraction including active businesses, transit stops, colleges, schools, and hospitals to develop a score based on the distance to these points. It also takes into account population density, employment density, and commuter information. To create this layer, run the demand.py script. This script uses the Euclidean Distance tool to generate a series of rasters from the vector inputs. The rasters created indicate the distance from the vector feature to the the surrounding areas and are then reclassified 1-5 based on set distance groups. See the scoring table below.
 
@@ -70,7 +70,7 @@ The output of the script is a polygon layer with a score 1 - 5. See script docum
 
 ## Safety
 
-Inputs: Crash Layer, LTS Layers
+_Inputs: Crash Layer, LTS Layers_
 
 Once you have a LTS road network and crash data you can use the Safety Scoring tool to calculate the raw severity and raw frequency scores. The tool does the work for you, but below is an explanation of how the scores are derived.
 
@@ -89,7 +89,7 @@ Calculate the Safety Score by taking the average of the Severity and Frequency.
 
 ## Equity
 
-Inputs: EJ Layer, LTS
+_Inputs: EJ Layer, LTS_
 
 The EJ Layer is created outside of this tool. The layer has an EJ Index field which is is based on demographics including poverty level, minority populations, zero car households, age, disability, education level, low English proficiency. We use the EJ Index to calculate the Equity score. First we scale the values 1 to 5, treating MPO and Rural areas separately. You can use the Scale Feature tool for this. To calculate the Equity Score for the LTS segments use the Weighted Average method described in this document.
 
@@ -129,13 +129,13 @@ Step 4. Join Tables
 
 ## Things To Improve
 
-Non-coincident Polygons
+### Non-coincident Polygons
 Setting up some type of topology checks on our polygon layers will be beneficial to the process. Some polygons are not coincident or they do not totally encompass our road network. This causes issues with the weighted average process.
 
-Lost Fields
+### Lost Fields
 Somewhere in the process some field information is being lost. For example, I’ve had trouble with ‘rte_nme’. My quick fix has been to rejoin the tables with the missing information, but it would be worth it to take some time and fix the problem.
 
-Model Criteria (features) Overlap
+### Model Criteria (features) Overlap
 It’s possible that some features of this model are being accounted for more than once. I think it would be worth running a PCA to identify possible model features with high correlation.
 
 
