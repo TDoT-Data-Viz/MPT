@@ -1,7 +1,6 @@
-# MPT
-## Multimodal Prioritization Tool
+# Multimodal Prioritization Tool MPT
 
-The Multimodal Prioritization Tool (MPT) uses spatial analysis and data from various sources to identify the suitability of multimodal projects. The goal is to identify the roads and communities that would benefit most from a multimodal project and the feasibility of projects based on the existing physical features and infrastructure of road segments. This is documentation on the process.
+**The Multimodal Prioritization Tool (MPT) uses spatial analysis and data from various sources to identify the suitability of multimodal projects. The goal is to identify the roads and communities that would benefit most from a multimodal project and the feasibility of projects based on the existing physical features and infrastructure of road segments. This is documentation on the process.**
 
 
 ## Four Components of the MPT
