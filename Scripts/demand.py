@@ -68,7 +68,8 @@ def Demand(planning_area, inputs, output):
     print("Starting LC Reclass")
     # Reclassify Land Cover
     arcpy.gp.Reclassify_sa(os.path.join(inputs, 'ActiveLC'), "NLCD_Land_Cover_Class",
-                           "'Developed, Low Intensity' 3;'Developed, Medium Intensity' 4;'Developed, High Intensity' 5;NODATA 1",
+                           "'Developed, Low Intensity' 3;'Developed, Medium Intensity' 4;'Developed, High Intensity' "
+                           "5;NODATA 1",
                            os.path.join(output, 'rWS_LandCover'), "DATA")
 
     # Build weighted sum table
