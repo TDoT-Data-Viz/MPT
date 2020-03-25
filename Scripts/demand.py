@@ -37,16 +37,18 @@ def Demand(planning_area, inputs, output):
     print("Environment Set Up")
 
     # Get a list of all point and polyline features features in 'inputs' database
-    point_features = arcpy.ListFeatureClasses(feature_type="POINT")
+    ed_features = arcpy.ListFeatureClasses(feature_type="POINT")
     for i in arcpy.ListFeatureClasses(feature_type="POLYLINE"):
-        point_features.append(i)
-    print(point_features)
+        ed_features.append(i)
+    print(ed_features)
 
     # Run Euclidean Distance for each point feature in 'inputs' database and Reclassify 1-5.
-    for fc in point_features:
+    for fc in ed_features:
         edLayer = arcpy.gp.EucDistance_sa(os.path.join(inputs, fc), os.path.join(output, "rED_"+fc), "")
         # The values can be changed to create Bike or Ped Demand layer.
-        arcpy.gp.Reclassify_sa(edLayer, "VALUE", "0 1320 5;1320 2640 4;2640 3960 3;3960 5280 2;5280 1000000 1", os.path.join(output, "rWS_"+fc), "DATA")
+        # TODO: Make distance groups a parameter of the function.
+        arcpy.gp.Reclassify_sa(edLayer, "VALUE", "0 1320 5;1320 2640 4;2640 3960 3;3960 5280 2;5280 1000000 1",
+                               os.path.join(output, "rWS_"+fc), "DATA")
         # This clears the memory so you don't run out.
         del edLayer
 
@@ -65,7 +67,9 @@ def Demand(planning_area, inputs, output):
     arcpy.gp.Slice_sa(rCommute, os.path.join(output, 'rWS_Commute'), "5" ,"NATURAL_BREAKS", "1" )
     print("Starting LC Reclass")
     # Reclassify Land Cover
-    arcpy.gp.Reclassify_sa(os.path.join(inputs, 'ActiveLC'), "NLCD_Land_Cover_Class", "'Developed, Low Intensity' 3;'Developed, Medium Intensity' 4;'Developed, High Intensity' 5;NODATA 1", os.path.join(output, 'rWS_LandCover'), "DATA")
+    arcpy.gp.Reclassify_sa(os.path.join(inputs, 'ActiveLC'), "NLCD_Land_Cover_Class",
+                           "'Developed, Low Intensity' 3;'Developed, Medium Intensity' 4;'Developed, High Intensity' 5;NODATA 1",
+                           os.path.join(output, 'rWS_LandCover'), "DATA")
 
     # Build weighted sum table
     env.workspace = output
@@ -80,7 +84,8 @@ def Demand(planning_area, inputs, output):
     WS_Slice = arcpy.gp.Slice_sa(outWS, os.path.join(output, "WS_Slice"), "5", "NATURAL_BREAKS", "1")
 
     # Zonal Statistics using Blocks
-    ZS = arcpy.gp.ZonalStatistics_sa(os.path.join(inputs, "Blocks"), "OBJECTID", WS_Slice, os.path.join(output, "ZonalSt_Demand"), "MEAN", "DATA")
+    ZS = arcpy.gp.ZonalStatistics_sa(os.path.join(inputs, "Blocks"), "OBJECTID", WS_Slice,
+                                     os.path.join(output, "ZonalSt_Demand"), "MEAN", "DATA")
     
     # Reclassify Zonal Statistics
     FD = arcpy.gp.Slice_sa(ZS, os.path.join(output, "FinalDemand"), "5", "NATURAL_BREAKS", "1")
@@ -91,5 +96,7 @@ def Demand(planning_area, inputs, output):
     print("--- %s seconds ---" % (time.time() - start_time))
 
 
-
-Demand(r"C:\Users\jj10048\Desktop\Projects\MSI\SupplyScriptTest\Demand.gdb\SW", r"C:\Users\jj10048\Desktop\Projects\MSI\SupplyScriptTest\Demand.gdb",r"C:\Users\jj10048\Desktop\Projects\MSI\SupplyScriptTest\Ped_Statewide.gdb")
+# Example
+Demand(r"C:\Users\jj10048\Desktop\Projects\MSI\SupplyScriptTest\Demand.gdb\SW",
+       r"C:\Users\jj10048\Desktop\Projects\MSI\SupplyScriptTest\Demand.gdb",
+       r"C:\Users\jj10048\Desktop\Projects\MSI\SupplyScriptTest\Ped_Statewide.gdb")
