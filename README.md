@@ -20,7 +20,7 @@ Note: This is very similar to how we create the Infrastructure layer (INFRA) for
 
 ### Create Unique IDs
 
-_This has been added to the script, but a different convention can be added._
+_This has been added to the script, but a different convention can be used._
 
 The LTS output is what will eventually become the final network. It is important to set up a unique ID (UID) at this stage, because we will be segmenting the network further and will use this UID to link the data to the correct segment. The format I’ve come up with is a simple field calculation using planning area information, functional class, and OBJECTID. For example, if I were doing MPO collectors I would create a field in the final output (‘Overlay_E’) called ‘UID’. Then do the following field calculation:
 
