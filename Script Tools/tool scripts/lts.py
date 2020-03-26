@@ -98,8 +98,10 @@ planning_areas = {
 # Defines which values to use for the defined functional classification.
 if func_class == "Collectors":
     func_classes = "('07', '08', '17', '18')"
+    uid_fc = "_COL_"
 elif func_class == "Arterials":
     func_classes = "('02', '06', '14', '16')"
+    uid_fc = "_ART_"
 
 # Gets the county values from the 'planning_area' dictionary for the selected planning area.
 counties = planning_areas.get(area)[0]
@@ -110,6 +112,15 @@ arcpy.AddMessage(pa)
 # Create gdb for output
 arcpy.CreateFileGDB_management(output, pa + "_" + func_class)
 db = os.path.join(output, pa + "_" + func_class + ".gdb")
+
+# This is for creating UID at the end
+if area =="All RPO":
+    uid_pa = "R"
+elif area == "All MPO":
+    uid_pa = "U"
+else:
+    uid_pa = "PA"
+uid = uid_pa+uid_fc
 
 # Creates a layer that includes events from 'RD_SGMNT' that correspond to the selected functional classes and counties.
 rd_seg = arcpy.analysis.TableSelect(os.path.join(tt, "RD_SGMNT"), os.path.join(db, func_class + "_" + pa),
@@ -283,3 +294,6 @@ arcpy.management.AddField(ov_e, "LTS_SCORE", "DOUBLE", None, None, None, '', "NU
 arcpy.management.CalculateField(ov_e, "LTS_SCORE",
                                 "(!AADTScore!+!CurbScore!+!LaneScore!+!SpeedScore!+!BikelaneScore!+!SidewalkScore!)/6",
                                 "PYTHON3", '')
+
+arcpy.management.AddField(ov_e, "UID", "TEXT", None, None, None, '', "NULLABLE", "NON_REQUIRED", '')
+arcpy.management.CalculateField(ov_e, "UID", "'{}'+str(!OBJECTID!)".format(uid), "PYTHON3", '')
